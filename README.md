@@ -3,12 +3,43 @@
 ## **This question assignment is 8-fold:**
 1. (15 Points) Define the rules for recognizing all lexemes as their proper token, and clearly define integer token codes for each token required for this language
     * Should have Regular Grammar, Regular Expression, or Finite Automat defined
+    ---
+    |Token      |Code   |Description                |Regular Expression     |
+    |:---       |:---   |:---                       |:---                   |
+    |INT_LIT    |10     |Integer literal            |\d+                    |
+    |IDENT      |11     |Identifier                 |[a-zA-Z][a-zA-Z_]{5,7} |
+    |ASSIGN_OP  |20     |Assignment operator        |=                      |
+    |ADD_OP     |21     |Addition operator          |\\+                    |
+    |SUB_OP     |22     |Subtraction operator       |-                      |
+    |MULT_OP    |23     |Multiplication operator    |\\*                    |
+    |DIV_OP     |24     |Division operator          |/                      |
+    |LEFT_PAREN |25     |Left parenthesis           |\\(                      |
+    |RIGHT_PAREN|26     |Right parenthesis          |\\)                      |
+    |MOD_OP     |27     |Multiplication operator    |%                      |
+    |GREATER_THAN|28    |Greater than comparison operator|>                 |
+    |LESS_THAN  |29     |Less than comparison operator|<                    |
+    |SEMICOLON  |31     |Semicolon                  |;                      |
+    |LEFT_BRACE |32     |Left brace                 |\\{                      |
+    |RIGHT_BRACE|33     |Right brace                |\\}                      |
+    |NOT_EQUAL  |34     |Not equal to comparison operator|\\!               |
+    |LEFT_BRACKET|35    |Left bracket               |\\[                      |
+    |RIGHT_BRACKET|36   |Right bracket              |\\]                      |
+    |UNDERSCORE |37     |Underscore                 |_                      |
+    |EQUAL      |38     |Equal to comparison operator|\\\|                    |
+    <!-- |LOOP       |50     |Loop                       |Loop                   | -->
 
 2. (15 Points) Define production rules for implementing the mathematical syntax of operators and operands, loops, variable declaration, selection statements
     * Enforce a non PEMDAS (BODMAS) order of operation, must have at least 6 levels of precedence
     * Keywords cannot use the words while, for, do, if, int, short, long
         * Keywords should be unique, if others share your same words, you may lose more points than this problem is worth
     * You must clearly state the structure of your language with production rules
+    <!-- ---
+    G = {V, Σ, R, S}
+    V = {}
+    Σ = {}
+    R = {}
+    S = {}
+     -->
 3. (10 points) Show whether every rule set in your language conforms to the standard of an LL Grammar.
 4. (5 points) Make sure it is not ambiguous grammar
 5. (15 points) Write a program that process all lexemes in a file by recognizing all tokens in a file, and produces a list of those tokens in order

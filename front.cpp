@@ -42,10 +42,11 @@ int lex(void);
 #define SEMICOLON 31
 #define LEFT_BRACE 32
 #define RIGHT_BRACE 33
-#define NOT 34
+#define NOT_EQUAL 34
 #define LEFT_BRACKET 35
 #define RIGHT_BRACKET 36
 #define UNDERSCORE 37
+#define EQUAL 38
 
 /******************************************************/
 /* main driver */
@@ -134,11 +135,15 @@ int lookup(char ch) {
 			 break;
 		 case '!':
 			 addChar();
-			 nextToken = NOT;
+			 nextToken = NOT_EQUAL;
 			 break;
 		 case '_':
 			 addChar();
 			 nextToken = UNDERSCORE;
+			 break;
+		 case '|':
+			 addChar();
+			 nextToken = EQUAL;
 			 break;
 		 default:
 			 addChar();
