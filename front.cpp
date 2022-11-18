@@ -14,7 +14,7 @@ int token;
 int nextToken;
 FILE *in_fp;
 FILE *out_fp;
-bool illegalVarName = false;
+bool lexicalError = false;
 
 /* Function declarations */
 int lookup(char ch);
@@ -22,6 +22,7 @@ void addChar(void);
 void getChar(void);
 void getNonBlank(void);
 int lex(void);
+void lexError(void);
 
 /* Character classes */
 #define LETTER 0
@@ -53,26 +54,6 @@ int lex(void);
 #define DATA_TYPE 51
 #define SELECTION 52
 
-/******************************************************/
-/* main driver */
-int main(void) {
-	/* Open the input data file and process its contents */
-	 if ((in_fp = fopen("front.in", "r")) == NULL){
-	 	printf("ERROR - cannot open front.in \n");
-		return 1;
-	 }
-	 if ((out_fp= fopen("tokenList.txt", "w")) == NULL){
-	 	printf("ERROR - cannot open tokenList.txt \n");
-        return 1;
-     }
-	 else {
-	 	getChar();
-	 do {
-	 	lex();
-	 } while ((nextToken != EOF) && !illegalVarName);
-	 }
-	 return 0;
-}
 /******************************************************/
 /* lookup - a function to look up operators and
  parentheses and return the token */
@@ -152,7 +133,8 @@ int lookup(char ch) {
 			 break;
 		 default:
 			 addChar();
-			 printf("Error - lexeme '%s' not in language\n", lexeme);
+			 lexError();
+			 printf("Lexeme '%s' not in language\n", lexeme);
 			 nextToken = EOF;
 			 break;
 	 }
@@ -168,7 +150,6 @@ void addChar(void) {
 	} else
 	printf("Error - lexeme is too long \n");
 }
-
 
 /******************************************************/
 /* getChar - a function to get the next character of
@@ -187,7 +168,6 @@ void getChar(void) {
 	 } else
 	 	charClass = EOF;
 }
-
 
 /******************************************************/
 /* getNonBlank - a function to call getChar until it
@@ -212,6 +192,7 @@ int lex(void) {
 				 addChar();
 				 getChar();
 			 }
+			/* Keywords */
 			if (!strcmp(lexeme, "LOOP")){
 				printf("Loop found\n");
 				nextToken = LOOP;
@@ -229,14 +210,14 @@ int lex(void) {
 			}
 			/* Variable names must be 6-8 characters long */
 			if (lexLen < 6){
-				printf("ERROR - %s is too short to be a valid name\n", lexeme);
+				printf("%s is too short to be a valid name\n", lexeme);
 				printf("Variable names must be between 6 and 8 characters\n");
-				illegalVarName = true;
+				lexError();
 				break;
 			} else if (lexLen > 8){
-				printf("ERROR - %s is too long to be a valid name\n", lexeme);
+				printf("%s is too long to be a valid name\n", lexeme);
 				printf("Variable names must be between 6 and 8 characters\n");
-				illegalVarName = true;
+				lexError();
 				break;
 			}
 			 nextToken = IDENT;
@@ -271,7 +252,15 @@ int lex(void) {
 		fprintf(out_fp, "%d", nextToken);
 		fputc(' ',out_fp);
 	 }else{
-		printf("End of file\n");
+		printf("\nEnd of file\n");
 	 }
 	 return nextToken;
 } /* End of function lex */
+
+/******************************************************/
+/* lexError - a function to display that 
+	there is a lexical error and stop the program */
+void lexError(void) {
+	lexicalError = true;
+	printf("LEXICAL ERROR: ");
+}
