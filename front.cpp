@@ -2,6 +2,7 @@
  arithmetic expressions */
 #include <stdio.h>
 #include <ctype.h>
+#include <string.h>
 
 /* Global declarations */
 /* Variables */
@@ -13,6 +14,7 @@ int token;
 int nextToken;
 FILE *in_fp;
 FILE *out_fp;
+bool illegalVarName = false;
 
 /* Function declarations */
 int lookup(char ch);
@@ -47,6 +49,9 @@ int lex(void);
 #define RIGHT_BRACKET 36
 #define UNDERSCORE 37
 #define EQUAL 38
+#define LOOP 50
+#define DATA_TYPE 51
+#define SELECTION 52
 
 /******************************************************/
 /* main driver */
@@ -64,7 +69,7 @@ int main(void) {
 	 	getChar();
 	 do {
 	 	lex();
-	 } while (nextToken != EOF);
+	 } while ((nextToken != EOF) && !illegalVarName);
 	 }
 	 return 0;
 }
@@ -207,7 +212,33 @@ int lex(void) {
 				 addChar();
 				 getChar();
 			 }
-			//  TODO: add check here against keywords and assign as such if appropriate
+			if (!strcmp(lexeme, "LOOP")){
+				printf("Loop found\n");
+				nextToken = LOOP;
+				break;
+			}
+			if (!strcmp(lexeme, "DATA_TYPE")){
+				printf("Data type found\n");
+				nextToken = DATA_TYPE;
+				break;
+			}
+			if (!strcmp(lexeme, "SELECTION")){
+				printf("Selection found\n");
+				nextToken = SELECTION;
+				break;
+			}
+			/* Variable names must be 6-8 characters long */
+			if (lexLen < 6){
+				printf("ERROR - %s is too short to be a valid name\n", lexeme);
+				printf("Variable names must be between 6 and 8 characters\n");
+				illegalVarName = true;
+				break;
+			} else if (lexLen > 8){
+				printf("ERROR - %s is too long to be a valid name\n", lexeme);
+				printf("Variable names must be between 6 and 8 characters\n");
+				illegalVarName = true;
+				break;
+			}
 			 nextToken = IDENT;
 			 break;
 		/* Integer literals */
@@ -242,7 +273,5 @@ int lex(void) {
 	 }else{
 		printf("End of file\n");
 	 }
-	// fputc(nextChar, out_fp);
-	// fputc(' ',out_fp);
 	 return nextToken;
 } /* End of function lex */
