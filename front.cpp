@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
+#include <stdlib.h>
 
 /* Global declarations */
 /* Variables */
@@ -16,7 +17,7 @@ FILE *in_fp;
 FILE *out_fp;
 bool lexicalError = false;
 
-/* Function declarations */
+/* Lexical function declarations */
 int lookup(char ch);
 void addChar(void);
 void getChar(void);
@@ -50,9 +51,12 @@ void lexError(void);
 #define RIGHT_BRACKET 36
 #define UNDERSCORE 37
 #define EQUAL 38
-#define LOOP 50
-#define DATA_TYPE 51
-#define SELECTION 52
+#define TREVOR_LOOP 50
+#define TREVOR_SELECTION 51
+#define JUST_ONE_BYTE 60
+#define JUST_TWO_BYTES 61
+#define JUST_FOUR_BYTES 62
+#define JUST_EIGHT_BYTES 63
 
 /******************************************************/
 /* lookup - a function to look up operators and
@@ -193,19 +197,34 @@ int lex(void) {
 				 getChar();
 			 }
 			/* Keywords */
-			if (!strcmp(lexeme, "LOOP")){
+			if (!strcmp(lexeme, "TREV_LOOP")){
 				printf("Loop found\n");
-				nextToken = LOOP;
+				nextToken = TREVOR_LOOP;
 				break;
 			}
-			if (!strcmp(lexeme, "DATA_TYPE")){
-				printf("Data type found\n");
-				nextToken = DATA_TYPE;
-				break;
-			}
-			if (!strcmp(lexeme, "SELECTION")){
+			if (!strcmp(lexeme, "TREVOR_SELECTION")){
 				printf("Selection found\n");
-				nextToken = SELECTION;
+				nextToken = TREVOR_SELECTION;
+				break;
+			}
+			if (!strcmp(lexeme, "JUST_ONE_BYTE")){
+				printf("JUST_ONE_BYTE found\n");
+				nextToken = JUST_ONE_BYTE;
+				break;
+			}
+			if (!strcmp(lexeme, "JUST_TWO_BYTES")){
+				printf("JUST_TWO_BYTES found\n");
+				nextToken = JUST_TWO_BYTES;
+				break;
+			}
+			if (!strcmp(lexeme, "JUST_FOUR_BYTES")){
+				printf("JUST_FOUR_BYTES found\n");
+				nextToken = JUST_FOUR_BYTES;
+				break;
+			}
+			if (!strcmp(lexeme, "JUST_EIGHT_BYTES")){
+				printf("JUST_EIGHT_BYTES found\n");
+				nextToken = JUST_EIGHT_BYTES;
 				break;
 			}
 			/* Variable names must be 6-8 characters long */
@@ -262,5 +281,6 @@ int lex(void) {
 	there is a lexical error and stop the program */
 void lexError(void) {
 	lexicalError = true;
-	printf("LEXICAL ERROR: ");
+	printf("LEXICAL ERROR AT LEXEME %s \nSTOPPING EXECUTION NOW\n", lexeme);
+	exit(1);
 }
