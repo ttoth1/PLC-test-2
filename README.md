@@ -38,6 +38,8 @@ This will run the analyzer on the given input file and display information about
     |RIGHT_BRACKET|36   |Right bracket              |\\]                    |
     |UNDERSCORE |37     |Underscore                 |_                      |
     |EQUAL      |38     |Equal to comparison operator|\\\|                  |
+    |GREATER_THAN_EQUAL|39|Greater than equal to comparison operator|@      |
+    |LESS_THAN_EQUAL|40 |Less than equal to comparison operator|\\$         |
     |TREVOR_LOOP|50     |Loop                       |TREVOR_LOOP            |
     |TREVOR_SELECTION|51|Selection (like "if")      |TREVOR_SELECTION       |
     |TREVOR_ALT_SELECTION|52|Selection (like "else")|TREVOR_ALT_SELECTION   |
@@ -52,15 +54,17 @@ This will run the analyzer on the given input file and display information about
         * Keywords should be unique, if others share your same words, you may lose more points than this problem is worth
     * You must clearly state the structure of your language with production rules
     ---
+    It is important to stay positive. As a reminder of this mindset, I have moved the `+` operator up in precedence to be with `*`, `/`, `%`
+
     G = {V, Σ, R, S}
 
-    V = {}
+    V = {`<program>, <stmt>, <sel_stmt>, <loop_stmt>, <assign_stmt>, <block>, <declare_stmt>, <expr>, <term>, <factor>`}
     
-    Σ = {}
+    Σ = {`TREVOR_SELECTION, TREVOR_ALT_SELECTION, TREVOR_LOOP, JUST_ONE_BYTE, JUST_TWO_BYTES, JUST_FOUR_BYTES, JUST_EIGHT_BYTES, (, ), +, -, *, /, %, >, <, =, ;, {, }, [, ], !, _, |, @, $, ident, int_lit`}
     
     R = {
         
-        <program> -> `[` <stmt> `]`
+        <program> --> `[` <stmt> `]`
         
         <stmt> --> <sel_stmt> | <loop_stmt> | <assign_stmt> | <block> | <declare_stmt>
         
@@ -74,9 +78,9 @@ This will run the analyzer on the given input file and display information about
         
         <assign_stmt>  --> `ident` `=` <expr>
         
-        <expr> -> <term> { (`+`|`-`) <term> }
+        <expr> --> <term> { `-` <term> }
         
-        <term> --> <factor> { (`*`|`\`|`%`) <factor> }
+        <term> --> <factor> { (`+`|`*`|`/`|`%`) <factor> }
 
         <factor> --> `ident` | `int_lit` | `(` <expr> `)`
 
@@ -85,6 +89,51 @@ This will run the analyzer on the given input file and display information about
     S = {`<program>`}
     
 3. (10 points) Show whether every rule set in your language conforms to the standard of an LL Grammar.
+---
+To be a LL Grammar, all rules must pass the pairwise disjointness test(PDT), and there must be no lefthand recursion.
+
+        Rule: <program> --> `[` <stmt> `]`
+        PDT: FIRST(<program>) --> {`[`}
+        No lefthand recursion.
+
+        Rule: <stmt> --> <sel_stmt> | <loop_stmt> | <assign_stmt> | <block> | <declare_stmt>
+        PDT: FIRST(<stmt>) --> {`TREVOR_SELECTION`}{`TREVOR_LOOP`}{`ident`}{`{`}{`JUST_ONE_BYTE`,`JUST_TWO_BYTES`,`JUST_FOUR_BYTES`,`JUST_EIGHT_BYTES`}
+        No lefthand recursion.
+
+        Rule: <sel_stmt> -->  `TREVOR_SELECTION``(`<expr>`)` <stmt> [ `TREVOR_ALT_SELECTION` <stmt> ]
+        PDT: FIRST(<sel_stmt>) --> {`TREVOR_SELECTION`}
+        No lefthand recursion.
+
+        Rule: <loop_stmt> -->  `TREVOR_LOOP``(`<expr>`)` <stmt> 
+        PDT: FIRST(<loop_stmt>) --> {`TREVOR_LOOP`}
+        No lefthand recursion.
+
+        Rule: <declare_stmt>  --> (`JUST_ONE_BYTE`|`JUST_TWO_BYTES`|`JUST_FOUR_BYTES`|`JUST_EIGHT_BYTES`) `ident`
+        PDT: FIRST(<declare_stmt>) --> {`JUST_ONE_BYTE`,`JUST_TWO_BYTES`,`JUST_FOUR_BYTES`,`JUST_EIGHT_BYTES`}
+        No lefthand recursion.
+
+        Rule: <block> --> `{` { <stmt>`;` } `}` 
+        PDT: FIRST(<block>) --> {`{`}
+        No lefthand recursion.
+
+        Rule: <assign_stmt>  --> `ident` `=` <expr>
+        PDT: FIRST(<assign_stmt>) --> {`ident`}
+        No lefthand recursion.
+
+        Rule: <expr> --> <term> { `-` <term> }
+        PDT: FIRST(<expr>) --> {`ident`, `int_lit`, `(`}
+        No lefthand recursion.
+
+        Rule: <term> --> <factor> { (`+`|`*`|`/`|`%`) <factor> }
+        PDT: FIRST(<term>) --> {`ident`, `int_lit`, `(`}
+        No lefthand recursion.
+
+        Rule: <factor> --> `ident` | `int_lit` | `(` <expr> `)`
+        PDT: FIRST(<factor>) --> {`ident`, `int_lit`, `(`}
+        No lefthand recursion.
+
+Since all rules pass the pairwise disjointness test and there is no lefthand recursion, my language is an LL Grammar.
+
 4. (5 points) Make sure it is not ambiguous grammar
 5. (15 points) Write a program that process all lexemes in a file by recognizing all tokens in a file, and produces a list of those tokens in order
     * If a group of characters is not defined in your language your program should print an error message stating what went wrong and terminate (stop running)

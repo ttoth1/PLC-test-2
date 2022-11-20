@@ -52,6 +52,8 @@ void lexError(void);
 #define RIGHT_BRACKET 36
 #define UNDERSCORE 37
 #define EQUAL 38
+#define GREATER_THAN_EQUAL 39
+#define LESS_THAN_EQUAL 40
 #define TREVOR_LOOP 50
 #define TREVOR_SELECTION 51
 #define TREVOR_ALT_SELECTION 52
@@ -136,6 +138,14 @@ int lookup(char ch) {
 		 case '|':
 			 addChar();
 			 nextToken = EQUAL;
+			 break;
+		 case '@':
+			 addChar();
+			 nextToken = GREATER_THAN_EQUAL;
+			 break;
+		 case '$':
+			 addChar();
+			 nextToken = LESS_THAN_EQUAL;
 			 break;
 		 default:
 			 addChar();
