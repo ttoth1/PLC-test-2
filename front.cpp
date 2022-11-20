@@ -16,6 +16,7 @@ int nextToken;
 FILE *in_fp;
 FILE *out_fp;
 bool lexicalError = false;
+int lexemeCount = 0;
 
 /* Lexical function declarations */
 int lookup(char ch);
@@ -198,7 +199,7 @@ int lex(void) {
 				 getChar();
 			 }
 			/* Keywords */
-			if (!strcmp(lexeme, "TREV_LOOP")){
+			if (!strcmp(lexeme, "TREVOR_LOOP")){
 				printf("Loop found\n");
 				nextToken = TREVOR_LOOP;
 				break;
@@ -276,8 +277,10 @@ int lex(void) {
 		nextToken, lexeme);
 		fprintf(out_fp, "%d", nextToken);
 		fputc(' ',out_fp);
+		lexemeCount++;
 	 }else{
 		printf("\nEnd of file\n");
+		printf("\nLexeme count: %d\n", lexemeCount);
 	 }
 	 return nextToken;
 } /* End of function lex */

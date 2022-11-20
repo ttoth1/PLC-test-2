@@ -9,7 +9,7 @@ int main(int argc, char *argv[]) {
     }
 	/* Open the input data file and process its contents */
 	 if ((in_fp = fopen(argv[1], "r")) == NULL){
-	 	printf("ERROR - cannot open front.in \n");
+	 	printf("ERROR - cannot open %s\n", argv[1]);
 		return 1;
 	 }
 	 if ((out_fp = fopen("tokenList.txt", "w")) == NULL){
