@@ -1,3 +1,15 @@
+## How to run my program for lexical/syntax analysis of my language:
+Disclaimer: This works for me in a wsl terminal. If you have a different setup, you may need to run different commands.
+
+1. Download the files from this repository into a folder.
+2. Open the folder in wsl terminal.
+3. Run the following commands in order
+
+- `gcc -o main mainProgramTest2.cpp`
+
+- `./main <input_filename_here>`
+
+This will run the analyzer on the given input file and display information about the analysis to the terminal. Any errors will be displayed, stopping the program. If there are no errors, there will be a success message displayed at the end.
 # Assignment requirements
 (Given in PLCTest2.pdf)
 ## **This question assignment is 8-fold:**
@@ -28,6 +40,7 @@
     |EQUAL      |38     |Equal to comparison operator|\\\|                  |
     |TREVOR_LOOP|50     |Loop                       |TREVOR_LOOP            |
     |TREVOR_SELECTION|51|Selection (like "if")      |TREVOR_SELECTION       |
+    |TREVOR_ALT_SELECTION|52|Selection (like "else")|TREVOR_ALT_SELECTION   |
     |JUST_ONE_BYTE|60   |One-byte integer type      |JUST_ONE_BYTE          |
     |JUST_TWO_BYTES|61  |Two-byte integer type      |JUST_TWO_BYTES         |
     |JUST_FOUR_BYTES|62 |Four-byte integer type     |JUST_FOUR_BYTES        |
@@ -51,6 +64,10 @@
         
         <stmt> --> <sel_stmt> | <loop_stmt> | <assign_stmt> | <block> | <declare_stmt>
         
+        <sel_stmt> -->  `TREVOR_SELECTION``(`<expr>`)` <stmt> [ `TREVOR_ALT_SELECTION` <stmt> ]
+        
+        <loop_stmt> -->  `TREVOR_LOOP``(`<expr>`)` <stmt> 
+        
         <declare_stmt>  --> (`JUST_ONE_BYTE`|`JUST_TWO_BYTES`|`JUST_FOUR_BYTES`|`JUST_EIGHT_BYTES`) `ident`
 
         <block> --> `{` { <stmt>`;` } `}`
@@ -73,7 +90,15 @@
     * If a group of characters is not defined in your language your program should print an error message stating what went wrong and terminate (stop running)
     * This program should be written in an Object-Oriented fashion
     * This program should have comments to describe each method that is defined
+    ---
+    `front.cpp` is the lexical analyzer that checks the input file for valid lexemes and outputs their token codes as a space separated list to `tokenList.txt`
+
+    If there is a lexical error, it will be printed to the terminal in the format `LEXICAL ERROR AT LEXEME <lexeme>` and halt program execution. The program also displays the token codes and lexemes to the terminal to help with debugging if an error is found
 6. (10 points) Write a program or an extension to the above program that determines if the tokens conform to the correct syntax.
+    ***
+    `rda.cpp` is the syntax analyzer that checks the token order for valid syntax, according to the language rules.
+
+    If there is a syntax error, it will be printed to the terminal in the format `SYNTAX ERROR AT LEXEME <lexeme>` and halt program execution. The program also displays the functions it is entering/exiting to the terminal to help with debugging if an error is found.
 7. (10 points) Create 4 test files that have different names where each should have 30 or more lexemes that can be converted into tokens
     * 1 with a at least 5 lexical errors based on the rules you defined
         * Detail each error and say why it doesn’t work

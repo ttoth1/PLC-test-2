@@ -53,6 +53,7 @@ void lexError(void);
 #define EQUAL 38
 #define TREVOR_LOOP 50
 #define TREVOR_SELECTION 51
+#define TREVOR_ALT_SELECTION 52
 #define JUST_ONE_BYTE 60
 #define JUST_TWO_BYTES 61
 #define JUST_FOUR_BYTES 62
@@ -205,6 +206,11 @@ int lex(void) {
 			if (!strcmp(lexeme, "TREVOR_SELECTION")){
 				printf("Selection found\n");
 				nextToken = TREVOR_SELECTION;
+				break;
+			}
+			if (!strcmp(lexeme, "TREVOR_ALT_SELECTION")){
+				printf("Selection found\n");
+				nextToken = TREVOR_ALT_SELECTION;
 				break;
 			}
 			if (!strcmp(lexeme, "JUST_ONE_BYTE")){

@@ -2,9 +2,13 @@
 
 /******************************************************/
 /* main driver */
-int main(void) {
+int main(int argc, char *argv[]) {
+    if (argc != 2){
+	 	printf("ERROR - must supply filename of input to be read\n");
+        return 1;
+    }
 	/* Open the input data file and process its contents */
-	 if ((in_fp = fopen("front.in", "r")) == NULL){
+	 if ((in_fp = fopen(argv[1], "r")) == NULL){
 	 	printf("ERROR - cannot open front.in \n");
 		return 1;
 	 }
