@@ -135,6 +135,9 @@ To be a LL Grammar, all rules must pass the pairwise disjointness test(PDT), and
 Since all rules pass the pairwise disjointness test and there is no lefthand recursion, my language is an LL Grammar.
 
 4. (5 points) Make sure it is not ambiguous grammar
+---
+In the screenshots folder, you can see the rules in the 5 LRtable files that show the grammar is not ambiguous.
+
 5. (15 points) Write a program that process all lexemes in a file by recognizing all tokens in a file, and produces a list of those tokens in order
     * If a group of characters is not defined in your language your program should print an error message stating what went wrong and terminate (stop running)
     * This program should be written in an Object-Oriented fashion
@@ -154,8 +157,18 @@ Since all rules pass the pairwise disjointness test and there is no lefthand rec
     * 1 with at least 5 syntax errors based on the rules you defined
         * Detail each error and say why it doesn’t work
     * 2 with no errors at all based on the language you created
+    ---
+    In the inputFiles folder is where my test files are located.
+
+    inputLexError.txt has several characters that are not in my language: *, ^, ", and #. It also has var_threeeee which is too long of a variable name and var which is too short.
+
+    inputSynError.txt has no [ at the start of the program. It needs a ; after var_two. var_two cannot be assigned TREVOR_LOOP. There cannot be a ] in the middle of the program. =+ is not an operator in my language.
 8. (20 points) Create a LR (1) parse table for your language. And show the trace of 4 code samples. Each must have 6 or more tokens.
     * Table must be provided, and the rules must be listed
     * 2 code samples must have errors
     * Show were these samples fail and pass the test
-
+---
+Check the screenshots folder for these code traces. 
+* LRtraceError1.png has an issue where there is an asterisk in between JUST_ONE_BYTE and ident that should be removed. 
+* LRtraceError2.png has an issue where there is a = in between the second ident and int_lit that should be changed into another math operator like +, -, * etc. 
+* The other two traces have no errors.

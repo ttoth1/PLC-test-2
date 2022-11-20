@@ -1,0 +1,10 @@
+[
+    {
+        JUST_ONE_BYTE var_One;
+        JUST_TWO_BYTES var_two;
+        var_two = (24%19-3+40)*3;
+        TREVOR_LOOP(309%2){
+            TREVOR_SELECTION (9+2) var_One=9 TREVOR_ALT_SELECTION var_two=3+4;
+        };
+    }
+]
